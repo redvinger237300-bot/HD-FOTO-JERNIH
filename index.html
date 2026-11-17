@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ANIME PIXEL AI – Gojo Edition</title>
+<style>
+:root{--c1:#35a7ff;--c2:#a24bff;--bg:#05060f;--tx:#e8eeff;--gl:rgba(14,18,42,.58);--bd:rgba(120,160,255,.25);--bl:14px}
+body.light{--bg:#eef2ff;--tx:#10142a;--gl:rgba(255,255,255,.75);--bd:rgba(80,100,200,.3)}
+body.lowfx{--bl:0px}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,sans-serif;overflow-x:hidden}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+[hidden]{display:none!important}
+.glass{background:var(--gl);backdrop-filter:blur(var(--bl));-webkit-backdrop-filter:blur(var(--bl));border:1px solid var(--bd);border-radius:18px;box-shadow:0 0 24px rgba(53,167,255,.15)}
+button,select,input,textarea{font:inherit;color:var(--tx)}
+button{background:linear-gradient(135deg,var(--c1),var(--c2));border:0;border-radius:12px;padding:9px 14px;cursor:pointer;color:#fff;font-weight:600;box-shadow:0 0 14px rgba(120,100,255,.4);transition:.2s}
+button:hover{transform:translateY(-1px);filter:brightness(1.15)}button.g{background:transparent;border:1px solid var(--bd);box-shadow:none}
+input,select,textarea{background:rgba(0,0,0,.3);border:1px solid var(--bd);border-radius:10px;padding:8px;width:100%}
+select option{color:#000}input[type=range]{padding:0}input[type=checkbox]{width:auto}
+label{display:block;font-size:12px;opacity:.85;margin:8px 0 2px}
+h1,h2,h3{margin:.2em 0}.grad{background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+#intro{position:fixed;inset:0;z-index:99;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:opacity 1s;padding:20px}
+#intro h1{font-size:clamp(22px,5vw,48px);letter-spacing:4px;animation:in 1.5s both;text-shadow:0 0 30px var(--c1)}
+#intro p{letter-spacing:6px;color:#b98cff;animation:in 1.5s .9s both}@keyframes in{from{opacity:0;transform:translateY(20px) scale(.95)}}
+#auth{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+#auth .glass{width:100%;max-width:400px;padding:22px}
+.tabs{display:flex;gap:6px;margin:10px 0}.tabs button{flex:1}
+#app{position:relative;z-index:2;padding-bottom:84px}
+header{display:flex;gap:10px;align-items:center;padding:10px 14px;position:sticky;top:0;z-index:5;margin:8px;flex-wrap:wrap}
+header .sp{flex:1}.chip{padding:4px 10px;border-radius:99px;border:1px solid var(--bd);font-size:12px}
+.demo{color:#ffd24b;border-color:#ffd24b}.bad{color:#ff6b8a;border-color:#ff6b8a}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:6;display:flex;gap:4px;overflow-x:auto;padding:6px;margin:6px;border-radius:16px}
+nav button{flex:0 0 auto;background:transparent;box-shadow:none;font-size:12px;padding:8px 10px}
+nav button.on{background:linear-gradient(135deg,var(--c1),var(--c2))}
+nav .more{display:none}nav.open .more{display:block}
+main{padding:8px 12px;max-width:1200px;margin:auto}
+section{display:none;animation:in .4s}section.on{display:block}
+.card{padding:16px;margin:10px 0}.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.stat{text-align:center}.stat b{font-size:26px;display:block}
+.bars{display:flex;gap:6px;align-items:flex-end;height:80px}.bars i{flex:1;background:linear-gradient(var(--c2),var(--c1));border-radius:6px 6px 0 0;min-height:3px}
+#cmp{position:relative;overflow:hidden;border-radius:14px;background:#000;min-height:160px}
+#cmp>*{width:100%;display:block;transform:scale(var(--z,1));transform-origin:center;max-height:70vh;object-fit:contain}
+#cmp #bi{position:absolute;inset:0;height:100%;clip-path:inset(0 50% 0 0)}
+#sl{position:absolute;bottom:6px;left:5%;width:90%;z-index:3;accent-color:var(--c1)}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.it{padding:8px;font-size:12px}.it img{width:100%;height:110px;object-fit:cover;border-radius:10px;background:#000}.it button{padding:4px 8px;font-size:12px}
+.prog{height:8px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden}.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--c2));transition:width .3s}
+.spin{width:22px;height:22px;border:3px solid var(--bd);border-top-color:var(--c1);border-radius:50%;animation:r 1s linear infinite;display:inline-block;vertical-align:middle}@keyframes r{to{transform:rotate(360deg)}}
+#toasts{position:fixed;top:12px;right:12px;z-index:100;display:grid;gap:8px}
+.toast{padding:10px 14px;border-radius:12px;background:var(--gl);border:1px solid var(--c1);animation:in .3s}.toast.e{border-color:#ff6b8a}
+#nc{position:fixed;top:60px;right:10px;width:min(340px,92vw);max-height:60vh;overflow:auto;z-index:50;padding:12px;font-size:13px}
+body.nomo *{animation:none!important;transition:none!important}
+@media(max-width:700px){header{margin:4px}}
+</style></head><body>
+<canvas id="bg"></canvas>
+<div id="intro"><h1>WELCOME TO ANIME PIXEL AI</h1><p>UNLEASH THE POWER OF INFINITY</p></div>
+
+<div id="auth" hidden><div class="glass">
+<h2 class="grad">ANIME PIXEL AI</h2><span id="mode" class="chip"></span>
+<div class="tabs"><button class="g" data-t="login">Login</button><button class="g" data-t="reg">Register</button><button class="g" data-t="forgot">Lupa</button></div>
+<div id="fN"><label>Username</label><input id="aN" autocomplete="username"></div>
+<label>Email</label><input id="aE" type="email" autocomplete="email">
+<div id="fP"><label>Password (min 8)</label><input id="aP" type="password" autocomplete="current-password"><label><input type="checkbox" id="sp"> Tampilkan password</label></div>
+<p id="aErr" style="color:#ff6b8a;min-height:1.2em"></p><button id="aGo" style="width:100%">Masuk</button>
+<p style="font-size:11px;opacity:.7">Privasi: password tidak pernah disimpan mentah. Mode DEMO menyimpan hash PBKDF2 lokal di perangkat ini saja.</p></div></div>
+
+<div id="app" hidden>
+<header class="glass"><b class="grad" style="font-size:18px">ANIME PIXEL AI</b><span id="hi"></span><span class="sp"></span>
+<span id="fpsC" class="chip">FPS</span><span id="cr" class="chip demo"></span><button class="g" id="bell">🔔 <span id="nb">0</span></button><button class="g" data-go="pro">👤</button></header>
+<div id="nc" class="glass" hidden></div>
+<main>
+<section id="p-home"><div class="card glass"><h1 class="grad">Gojo Creative Studio</h1><p>Enhance foto, edit, efek aura Gojo, dan kelola hasil — semua pemrosesan foto dasar berjalan lokal di browser. Fitur AI server aktif setelah backend dikonfigurasi.</p><button data-go="enh">Mulai Photo Enhancer</button> <button class="g" data-go="dash">Dashboard</button></div></section>
+<section id="p-dash"><div class="row" id="stats"></div><div class="card glass"><h3>Aktivitas 7 hari</h3><div class="bars" id="bars"></div></div><div class="card glass"><h3>Penggunaan kredit (DEMO)</h3><div id="clog"></div></div></section>
+
+<section id="p-studio">
+<div class="row"><div class="card glass">
+<h3 id="stT"></h3><input type="file" id="file" accept="image/png,image/jpeg,image/webp">
+<div data-g="e"><label>Resolusi target</label><select id="tg"><option value="0">Asli</option><option value="1280">HD (1280)</option><option value="1920">Full HD (1920)</option><option value="2560">2K (2560)</option><option value="3840">4K (3840)</option></select>
+<label>Upscale (jika target Asli)</label><select id="sc"><option>1</option><option>2</option><option>4</option><option>8</option></select></div>
+<div id="sl-box"></div>
+<div data-g="d"><label>Rotasi</label><select id="rot"><option>0</option><option>90</option><option>180</option><option>270</option></select>
+<label><input type="checkbox" id="fx"> Flip horizontal</label><label><input type="checkbox" id="fy"> Flip vertikal</label>
+<label>Teks / watermark</label><input id="txt"><label>Opacity teks</label><input type="range" id="to" min="5" max="100" value="70"></div>
+<div data-g="a"><label>Efek aura</label><select id="aura"><option value="">Tidak ada</option><option value="blue">Blue Aura</option><option value="purple">Purple Aura</option><option value="six">Gojo Six Eyes</option></select></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"><button id="auto">AUTO ENHANCE</button><button id="go">Proses</button><button class="g" id="undo">Undo</button><button class="g" id="redo">Redo</button><button class="g" id="rst">Reset</button></div>
+<button class="g" id="aiBtn" style="margin-top:8px;width:100%">AI Enhance (API server)</button><p id="aiSt" class="chip"></p>
+<p id="est" style="font-size:12px"></p><div class="prog"><i id="pg"></i></div></div>
+<div class="card glass"><div id="cmp"><canvas id="rc"></canvas><img id="bi" alt=""><input type="range" id="sl" min="0" max="100" value="50"></div>
+<label>Zoom</label><input type="range" id="zm" min="1" max="4" step=".1" value="1"><button class="g" id="fs">Fullscreen</button>
+<p id="info" style="font-size:12px"></p>
+<div class="row"><div><label>Format</label><select id="fmt"><option>png</option><option>jpeg</option><option>webp</option></select></div><div><label>Kualitas JPG/WebP</label><input type="range" id="q" min="30" max="100" value="92"></div><div><label>Nama file</label><input id="fn" value="anime-pixel"></div></div>
+<button id="dl" style="margin-top:8px">Download</button> <button class="g" id="fv">♥ Favorit</button></div></div></section>
+
+<section id="p-api"><div class="card glass"><h2 id="apT"></h2><span class="chip" id="apS"></span><div id="apF"></div><button id="apGo" style="margin-top:10px">Proses</button><div class="prog"><i id="apP"></i></div><div id="apO"></div></div></section>
+
+<section id="p-lst"><div class="card glass"><h2 id="lsT"></h2><div id="lsC" class="row"><input id="lq" placeholder="Cari file…"><select id="ls"><option value="d">Terbaru</option><option value="s">Ukuran</option></select><select id="lf"><option value="">Semua</option><option value="fav">Favorit</option></select><button class="g" id="lclr">Hapus semua riwayat</button></div><div id="list" class="list" style="margin-top:10px"></div></div></section>
+
+<section id="p-pro"><div class="row"><div class="card glass"><h3>Profil</h3><img id="av" width="72" height="72" style="border-radius:50%;object-fit:cover;background:#000"><input type="file" id="avf" accept="image/*"><label>Username</label><input id="pN"><label>Email</label><input id="pE" disabled><button id="pS" style="margin-top:8px">Simpan</button>
+<h3>Ubah password</h3><input id="pP" type="password" placeholder="Password baru (min 8)"><button class="g" id="pPb" style="margin-top:6px">Ubah</button></div>
+<div class="card glass"><h3>Riwayat aktivitas</h3><div id="alog" style="font-size:12px"></div><h3>Privasi</h3><p style="font-size:12px">Foto diproses di browser kecuali kamu memakai tombol API server. Hasil disimpan di IndexedDB perangkat ini. Hapus kapan saja.</p><button class="g" id="lo">Logout</button> <button class="g" id="del" style="border-color:#ff6b8a">Hapus akun</button></div></div></section>
+
+<section id="p-set"><div class="card glass"><h2>Pengaturan</h2><div class="row" id="setF"></div><button class="g" id="wipe" style="margin-top:10px">Hapus semua data lokal</button></div></section>
+</main>
+<nav class="glass" id="nav"></nav></div>
+<div id="toasts"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ===== KONFIGURASI BACKEND ===== */
+const CFG={API:'',MAX_MB:20,OK:['image/png','image/jpeg','image/webp']}; // isi API dgn URL backend, mis. https://api.domain.com (endpoint: /auth/login /auth/register /auth/forgot /enhance /remove-bg /generate /video). Jangan taruh API secret di sini.
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const LS=(k,v)=>v===undefined?JSON.parse(localStorage.getItem(k)||'null'):localStorage.setItem(k,JSON.stringify(v));
+let U=null,S={},recs=[],img=null,cur=null,curBlob=null,H=[],F=[],notes=[],tab='login';
+const DEF={perf:'medium',fps:true,parts:true,bgOn:true,motion:true,batt:false,lowblur:false,mode:'both',inten:1,speed:1,para:true,dark:true,sound:false,credits:100,dl:0,vid:0,log:[]};
+const NAV=[['home','Home'],['dash','Dashboard'],['enh','Photo Enhancer'],['edi','AI Editor'],['ani','Anime Tools'],['bg','BG Remover'],['gen','Image Generator'],['vid','Video Enhancer'],['his','History'],['fav','Favorites'],['fil','File Manager'],['pro','Profile'],['set','Settings']];
+const fmtB=b=>b>1e6?(b/1e6).toFixed(2)+' MB':(b/1e3).toFixed(0)+' KB';
+function toast(m,e){const d=document.createElement('div');d.className='toast'+(e?' e':'');d.textContent=m;$('#toasts').append(d);setTimeout(()=>d.remove(),3200);notes.unshift(new Date().toLocaleTimeString()+' – '+m);$('#nb').textContent=notes.length;$('#nc').innerHTML=notes.slice(0,40).map(n=>'<div>'+n.replace(/</g,'&lt;')+'</div>').join('')||'Kosong';if(S.sound)beep()}
+function beep(){try{const a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);g.gain.value=.05;o.frequency.value=660;o.start();o.stop(a.currentTime+.08)}catch(e){}}
+function act(t){S.log.unshift(new Date().toLocaleString()+' – '+t);S.log=S.log.slice(0,50);saveS()}
+const saveS=()=>U&&LS('ap_set_'+U.email,S),saveR=()=>LS('ap_rec_'+U.email,recs);
+/* ===== IndexedDB ===== */
+const idb=new Promise(r=>{const q=indexedDB.open('apai',1);q.onupgradeneeded=()=>q.result.createObjectStore('b');q.onsuccess=()=>r(q.result)});
+const bop=async(m,f)=>{const d=await idb;return new Promise(r=>{const q=f(d.transaction('b',m).objectStore('b'));q.onsuccess=()=>r(q.result)})};
+const bput=(k,v)=>bop('readwrite',s=>s.put(v,k)),bget=k=>bop('readonly',s=>s.get(k)),bdel=k=>bop('readwrite',s=>s.delete(k));
+/* ===== API ===== */
+async function api(path,opt={}){if(!CFG.API)throw Error('BELUM DIKONFIGURASI: isi CFG.API di index.html');const r=await fetch(CFG.API+path,{credentials:'include',...opt});if(!r.ok)throw Error('API '+r.status+' '+(await r.text()).slice(0,120));return r}
+/* ===== AUTH ===== */
+async function hash(pw,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);const b=await crypto.subtle.deriveBits({name:'PBKDF2',salt:new TextEncoder().encode(salt),iterations:150000,hash:'SHA-256'},k,256);return btoa(String.fromCharCode(...new Uint8Array(b)))}
+function setTab(t){tab=t;$('#fN').hidden=t!='reg';$('#fP').hidden=t=='forgot';$('#aGo').textContent={login:'Masuk',reg:'Daftar',forgot:'Kirim link reset'}[t];$('#aErr').textContent='';$$('.tabs button').forEach(b=>b.classList.toggle('g',b.dataset.t!=t))}
+$$('.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+$('#sp').onchange=e=>$('#aP').type=e.target.checked?'text':'password';
+$('#mode').textContent=CFG.API?'BACKEND AKTIF':'MODE DEMO (lokal)';$('#mode').className='chip '+(CFG.API?'':'demo');
+$('#aGo').onclick=async()=>{const e=$('#aE').value.trim().toLowerCase(),p=$('#aP').value,n=$('#aN').value.trim(),er=$('#aErr');er.textContent='';
+try{if(!/^\S+@\S+\.\S+$/.test(e))throw Error('Email tidak valid');
+if(tab=='forgot'){await api('/auth/forgot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})});return toast('Link reset dikirim')}
+if(p.length<8)throw Error('Password minimal 8 karakter');if(tab=='reg'&&n.length<2)throw Error('Username minimal 2 karakter');
+let u;if(CFG.API){u=await(await api('/auth/'+(tab=='reg'?'register':'login'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p,username:n})})).json()}
+else{const us=LS('ap_users')||{};if(tab=='reg'){if(us[e])throw Error('Email sudah terdaftar');const s=crypto.getRandomValues(new Uint32Array(4)).join('-');us[e]={name:n,salt:s,h:await hash(p,s)};LS('ap_users',us)}else{const x=us[e];if(!x||x.h!==await hash(p,x.salt))throw Error('Email atau password salah')}u={email:e,name:us[e].name}}
+sessionStorage.setItem('ap_s',JSON.stringify(u));toast('Login berhasil');start(u)}catch(x){er.textContent=x.message;toast(x.message,1)}};
+function start(u){U=u;S={...DEF,...(LS('ap_set_'+u.email)||{})};recs=LS('ap_rec_'+u.email)||[];$('#auth').hidden=true;$('#app').hidden=false;$('#hi').textContent='Halo, '+u.name;applyS();go('home');act('Login')}
+function logout(){sessionStorage.removeItem('ap_s');location.reload()}
+/* ===== NAV ===== */
+$('#nav').innerHTML=NAV.map((n,i)=>`<button data-go="${n[0]}" class="${i>4?'more':''}">${n[1]}</button>`).join('')+'<button id="mb">⋯</button>';
+$('#mb').onclick=()=>$('#nav').classList.toggle('open');
+const SL=[['sh','Sharpen',0,100,25,'e'],['dn','Noise reduction',0,100,0,'e'],['br','Brightness',-50,50,0,'c'],['ct','Contrast',-50,50,0,'c'],['sa','Saturasi',-100,100,0,'c'],['ex','Exposure',-50,50,0,'c'],['tp','Temperatur warna',-50,50,0,'c']];
+$('#sl-box').innerHTML=SL.map(s=>`<div data-g="${s[5]}"><label>${s[1]}</label><input type="range" id="${s[0]}" min="${s[2]}" max="${s[3]}" value="${s[4]}"></div>`).join('');
+const VIS={enh:'e c',edi:'c d',ani:'a e'},TT={enh:'AI Photo Enhancer (lokal)',edi:'AI Editor',ani:'Anime Tools'};
+function go(id){$('#nav').classList.remove('open');$('#nc').hidden=true;$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.go==id));$$('section').forEach(s=>s.classList.remove('on'));
+let sec=id;if(VIS[id]){sec='studio';$('#stT').textContent=TT[id];$$('[data-g]').forEach(e=>e.hidden=!VIS[id].split(' ').includes(e.dataset.g))}
+else if(['bg','gen','vid'].includes(id)){sec='api';apiPage(id)}else if(['his','fav','fil'].includes(id)){sec='lst';$('#lsT').textContent=NAV.find(n=>n[0]==id)[1];$('#lf').value=id=='fav'?'fav':'';showList()}
+else if(id=='dash')dash();else if(id=='pro')prof();
+$('#p-'+sec).classList.add('on');scrollTo(0,0)}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
+$('#bell').onclick=()=>$('#nc').hidden=!$('#nc').hidden;
+/* ===== PIPELINE ===== */
+function blur3(d,w,h){const t=new Uint8ClampedArray(d.length),o=new Uint8ClampedArray(d.length);
+for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=(y*w+x)*4,a=x?i-4:i,b=x<w-1?i+4:i;for(let c=0;c<3;c++)t[i+c]=(d[a+c]+d[i+c]+d[b+c])/3}
+for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=(y*w+x)*4,a=y?i-w*4:i,b=y<h-1?i+w*4:i;for(let c=0;c<3;c++)o[i+c]=(t[a+c]+t[i+c]+t[b+c])/3}return o}
+const ids=['tg','sc','sh','dn','br','ct','sa','ex','tp','rot','fx','fy','txt','to','aura'];
+const getV=()=>Object.fromEntries(ids.map(i=>[i,$('#'+i).type=='checkbox'?$('#'+i).checked:$('#'+i).value]));
+const setV=o=>ids.forEach(i=>{const e=$('#'+i);e.type=='checkbox'?e.checked=o[i]:e.value=o[i]});
+function render(prev){const p=getV(),w=img.naturalWidth,h=img.naturalHeight;let r=+p.tg?+p.tg/Math.max(w,h):+p.sc;if(prev)r=Math.min(1,700/Math.max(w,h));
+let W=Math.round(w*r),Hh=Math.round(h*r);const k=Math.min(1,8192/Math.max(W,Hh));W=Math.round(W*k);Hh=Math.round(Hh*k);
+const q=(+p.rot)%180!=0,cw=q?Hh:W,ch=q?W:Hh,c=document.createElement('canvas');c.width=cw;c.height=ch;const x=c.getContext('2d',{willReadFrequently:true});
+x.imageSmoothingQuality='high';x.translate(cw/2,ch/2);x.rotate(p.rot*Math.PI/180);x.scale(p.fx?-1:1,p.fy?-1:1);x.drawImage(img,-W/2,-Hh/2,W,Hh);x.setTransform(1,0,0,1,0,0);
+const id=x.getImageData(0,0,cw,ch),d=id.data,sh=p.sh/100*1.5,dn=p.dn/100,B=(sh||dn)?blur3(d,cw,ch):null,ex=Math.pow(2,p.ex/50),ct=1+p.ct/100,sa=1+p.sa/100,br=p.br*2.55,tw=p.tp*.8;
+for(let i=0;i<d.length;i+=4){let v=[0,0,0];for(let c=0;c<3;c++){let a=d[i+c];if(B)a=a*(1-dn)+B[i+c]*dn+sh*(d[i+c]-B[i+c]);v[c]=((a*ex+br)-128)*ct+128}
+v[0]+=tw;v[2]-=tw;const g=.299*v[0]+.587*v[1]+.114*v[2];for(let c=0;c<3;c++)d[i+c]=g+(v[c]-g)*sa}
+x.putImageData(id,0,0);
+if(p.aura){const col={blue:'0,160,255',purple:'170,60,255',six:'0,220,255'}[p.aura],g=x.createRadialGradient(cw/2,ch/2,Math.min(cw,ch)*.25,cw/2,ch/2,Math.max(cw,ch)*.75);g.addColorStop(0,'rgba('+col+',0)');g.addColorStop(1,'rgba('+col+',.6)');x.globalCompositeOperation='screen';x.fillStyle=g;x.fillRect(0,0,cw,ch);x.globalCompositeOperation='source-over'}
+if(p.txt){x.globalAlpha=p.to/100;x.font='bold '+Math.max(14,cw/25)+'px sans-serif';x.fillStyle='#fff';x.shadowColor='#000';x.shadowBlur=6;x.textAlign='right';x.fillText(p.txt,cw-cw/40,ch-ch/40);x.globalAlpha=1;x.shadowBlur=0}
+return c}
+function show(c){cur=c;const o=$('#rc');o.width=c.width;o.height=c.height;o.getContext('2d').drawImage(c,0,0);curBlob=null}
+let pt;function live(){if(!img)return;clearTimeout(pt);pt=setTimeout(()=>{try{show(render(1))}catch(e){}},150)}
+ids.forEach(i=>{$('#'+i).addEventListener('input',live);$('#'+i).addEventListener('change',()=>{H.push(JSON.stringify(getV()));F=[]})});
+$('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;
+if(!CFG.OK.includes(f.type))return toast('Tipe file tidak didukung (PNG/JPG/WebP)',1);if(f.size>CFG.MAX_MB*1e6)return toast('Maksimal '+CFG.MAX_MB+' MB',1);
+const i=new Image();i.onload=()=>{img=i;img.file=f;$('#bi').src=i.src;show(render(1));$('#info').textContent='Asli: '+i.naturalWidth+'×'+i.naturalHeight+' ('+fmtB(f.size)+')';toast('Upload berhasil');estimate()};i.onerror=()=>toast('File gambar rusak',1);i.src=URL.createObjectURL(f)};
+function estimate(){if(!img)return;const p=getV(),r=+p.tg?+p.tg/Math.max(img.naturalWidth,img.naturalHeight):+p.sc,mp=img.naturalWidth*img.naturalHeight*r*r/1e6;$('#est').textContent='Output ≈ '+Math.round(img.naturalWidth*r)+'×'+Math.round(img.naturalHeight*r)+' · estimasi ±'+Math.max(1,Math.round(mp/4))+' dtk · biaya '+cost()+' kredit (DEMO)'}
+const cost=()=>+$('#tg').value>=3840||+$('#sc').value>=4?4:2;
+['tg','sc'].forEach(i=>$('#'+i).addEventListener('change',estimate));
+$('#auto').onclick=()=>{if(!img)return toast('Upload foto dulu',1);const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.drawImage(img,0,0,64,64);const d=x.getImageData(0,0,64,64).data;let s=0,s2=0,n=d.length/4;for(let i=0;i<d.length;i+=4){const l=.299*d[i]+.587*d[i+1]+.114*d[i+2];s+=l;s2+=l*l}
+const m=s/n,sd=Math.sqrt(s2/n-m*m);$('#ex').value=Math.max(-30,Math.min(30,(120-m)/2.5));$('#ct').value=Math.max(-20,Math.min(40,(55-sd)*.8));$('#sa').value=12;$('#sh').value=35;H.push(JSON.stringify(getV()));live();toast('Auto Enhance diterapkan (analisis histogram lokal)')};
+$('#undo').onclick=()=>{if(H.length){F.push(JSON.stringify(getV()));setV(JSON.parse(H.pop()));live()}};
+$('#redo').onclick=()=>{if(F.length){H.push(JSON.stringify(getV()));setV(JSON.parse(F.pop()));live()}};
+$('#rst').onclick=()=>{H.push(JSON.stringify(getV()));ids.forEach(i=>{const e=$('#'+i);e.type=='checkbox'?e.checked=false:e.value=e.defaultValue||(e.tagName=='SELECT'?e.options[0].value:'')});$('#sh').value=25;$('#to').value=70;live()};
+function charge(n,why){if(S.credits<n)throw Error('Kredit tidak cukup');if(!confirm('Gunakan '+n+' kredit (DEMO) untuk '+why+'?'))throw Error('Dibatalkan');return()=>{S.credits-=n;S.log.unshift(new Date().toLocaleString()+' – −'+n+' kredit: '+why);saveS();applyS()}}
+async function finish(c,name){show(c);const f=$('#fmt').value;curBlob=await new Promise(r=>c.toBlob(r,'image/'+f,$('#q').value/100));$('#bi').style.display='';
+$('#info').textContent='Asli: '+img.naturalWidth+'×'+img.naturalHeight+' ('+fmtB(img.file.size)+') → Hasil: '+c.width+'×'+c.height+' ('+fmtB(curBlob.size)+', '+f+')';
+const id=Date.now().toString(36),t=document.createElement('canvas');t.width=160;t.height=Math.max(1,Math.round(160*c.height/c.width));t.getContext('2d').drawImage(c,0,0,t.width,t.height);
+await bput(id,curBlob);recs.unshift({id,name,date:Date.now(),w:c.width,h:c.height,size:curBlob.size,fmt:f,fav:false,thumb:t.toDataURL('image/jpeg',.6)});recs=recs.slice(0,60);saveR();toast('Pemrosesan selesai ('+c.width+'×'+c.height+')');act('Proses foto '+c.width+'×'+c.height)}
+$('#go').onclick=async()=>{if(!img)return toast('Upload foto dulu',1);let done;try{done=charge(cost(),'proses foto')}catch(e){return toast(e.message,1)}
+toast('Pemrosesan dimulai');$('#pg').style.width='30%';await new Promise(r=>setTimeout(r,60));
+try{const c=render(0);$('#pg').style.width='80%';await finish(c,img.file.name);done();$('#pg').style.width='100%'}catch(e){toast('Gagal: '+e.message+' (kredit tidak dikurangi)',1);$('#pg').style.width='0'}};
+$('#aiBtn').onclick=async()=>{if(!img)return toast('Upload foto dulu',1);let done;try{done=charge(cost()+2,'AI Enhance server')}catch(e){return toast(e.message,1)}
+try{toast('Pemrosesan dimulai');const fd=new FormData();fd.append('image',img.file);fd.append('scale',$('#sc').value);fd.append('target',$('#tg').value);const b=await(await api('/enhance',{method:'POST',body:fd})).blob(),i=await createImageBitmap(b),c=document.createElement('canvas');c.width=i.width;c.height=i.height;c.getContext('2d').drawImage(i,0,0);await finish(c,img.file.name);done()}catch(e){toast(e.message,1)}};
+$('#aiSt').textContent=CFG.API?'API: '+CFG.API:'AI server: BELUM DIKONFIGURASI';$('#aiSt').className='chip '+(CFG.API?'':'bad');
+$('#sl').oninput=e=>$('#bi').style.clipPath='inset(0 '+(100-e.target.value)+'% 0 0)';
+$('#zm').oninput=e=>$('#cmp').style.setProperty('--z',e.target.value);$('#fs').onclick=()=>$('#cmp').requestFullscreen&&$('#cmp').requestFullscreen();
+async function blobNow(){if(!cur)throw Error('Belum ada hasil');if(!curBlob)throw Error('Tekan Proses dulu agar hasil final dibuat (preview bukan resolusi akhir)');return curBlob}
+$('#dl').onclick=async()=>{try{const f=$('#fmt').value,b=await new Promise(r=>cur.toBlob(r,'image/'+f,$('#q').value/100));if(!curBlob)throw Error('Tekan Proses dulu agar hasil final dibuat');dlBlob(b,($('#fn').value||'anime-pixel')+'.'+(f=='jpeg'?'jpg':f))}catch(e){toast(e.message,1)}};
+function dlBlob(b,n){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);S.dl++;saveS();toast('Download berhasil')}
+$('#fv').onclick=()=>{const r=recs[0];if(!r||!curBlob)return toast('Proses foto dulu',1);r.fav=true;saveR();toast('Disimpan ke favorit')};
+/* ===== API PAGES (bg / gen / vid) ===== */
+const AP={bg:{t:'Background Remover',p:'/remove-bg',f:'<label>Foto</label><input type="file" id="a1" accept="image/*"><label>Warna/Background transparan</label><select id="a2"><option value="png">Transparan (PNG)</option></select>'},
+gen:{t:'AI Image Generator',p:'/generate',f:'<label>Prompt</label><textarea id="a1" rows="3"></textarea><label>Rasio</label><select id="a2"><option>1:1</option><option>16:9</option><option>9:16</option><option>4:3</option></select><label>Gaya</label><select id="a3"><option>anime</option><option>cinematic</option><option>realistic</option></select><label>Resolusi</label><select id="a4"><option>1024</option><option>2048</option></select>'},
+vid:{t:'Video Enhancer',p:'/video',f:'<label>Video</label><input type="file" id="a1" accept="video/mp4,video/webm"><video id="vp" controls style="width:100%;max-height:240px"></video><label>FPS ekspor</label><select id="a2"><option>24</option><option selected>30</option><option>60</option><option>90</option><option>120</option></select><label>Resolusi</label><select id="a3"><option>1080</option><option>1440</option><option>2160</option></select><label>Opsi</label><label><input type="checkbox" id="a4" checked> Sharpen + Denoise + Color</label>'}};
+let apK;function apiPage(k){apK=k;const a=AP[k];$('#apT').textContent=a.t;$('#apF').innerHTML=a.f;$('#apO').innerHTML='';$('#apP').style.width=0;$('#apS').textContent=CFG.API?'API: '+CFG.API:'BELUM DIKONFIGURASI';$('#apS').className='chip '+(CFG.API?'':'bad');
+if(k=='vid')$('#a1').onchange=e=>{const f=e.target.files[0];if(f)$('#vp').src=URL.createObjectURL(f)}}
+$('#apGo').onclick=async()=>{let done;try{done=charge(apK=='vid'?10:apK=='gen'?5:3,AP[apK].t)}catch(e){return toast(e.message,1)}
+try{const o={method:'POST'},a1=$('#a1');if(apK=='gen'){o.headers={'Content-Type':'application/json'};if(!a1.value.trim())throw Error('Isi prompt');o.body=JSON.stringify({prompt:a1.value,ratio:$('#a2').value,style:$('#a3').value,size:$('#a4').value})}
+else{const f=a1.files[0];if(!f)throw Error('Pilih file');if(f.size>CFG.MAX_MB*1e6*(apK=='vid'?10:1))throw Error('File terlalu besar');if(apK=='bg'&&!CFG.OK.includes(f.type))throw Error('Tipe tidak didukung');const fd=new FormData();fd.append('file',f);if(apK=='vid'){fd.append('fps',$('#a2').value);fd.append('height',$('#a3').value);fd.append('enhance',$('#a4').checked)}o.body=fd}
+toast('Pemrosesan dimulai');$('#apP').style.width='40%';const b=await(await api(AP[apK].p,o)).blob();$('#apP').style.width='100%';done();
+const u=URL.createObjectURL(b),el=apK=='vid'?'<video controls src="'+u+'" style="width:100%"></video>':'<img src="'+u+'" style="max-width:100%">';
+$('#apO').innerHTML=el+'<br><button id="apD">Download</button>';$('#apD').onclick=()=>dlBlob(b,'anime-pixel-'+apK+(apK=='vid'?'.mp4':'.png'));if(apK=='vid')S.vid++;saveS();toast('Pemrosesan selesai')}catch(e){$('#apP').style.width=0;toast(e.message,1)}};
+/* ===== LIST / FAV / FILE MANAGER ===== */
+function showList(){const q=$('#lq').value.toLowerCase(),fv=$('#lf').value=='fav';let l=recs.filter(r=>(!fv||r.fav)&&r.name.toLowerCase().includes(q));l.sort($('#ls').value=='s'?(a,b)=>b.size-a.size:(a,b)=>b.date-a.date);
+$('#list').innerHTML=l.map(r=>`<div class="it glass"><img src="${r.thumb}" alt=""><div>${r.name.replace(/</g,'&lt;')}</div><div>${new Date(r.date).toLocaleDateString()} · ${r.w}×${r.h} · ${fmtB(r.size)}</div><button data-a="f" data-i="${r.id}">${r.fav?'♥':'♡'}</button> <button data-a="d" data-i="${r.id}">⬇</button> <button class="g" data-a="x" data-i="${r.id}">🗑</button></div>`).join('')||'<p>Belum ada data.</p>'}
+['lq','ls','lf'].forEach(i=>$('#'+i).oninput=showList);
+$('#list').onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const r=recs.find(x=>x.id==b.dataset.i);
+if(b.dataset.a=='f'){r.fav=!r.fav;toast(r.fav?'Disimpan ke favorit':'Favorit dihapus')}
+if(b.dataset.a=='d'){const bl=await bget(r.id);if(!bl)return toast('File tidak ditemukan',1);dlBlob(bl,r.name.replace(/\.\w+$/,'')+'-hd.'+(r.fmt=='jpeg'?'jpg':r.fmt))}
+if(b.dataset.a=='x'&&confirm('Hapus file ini?')){await bdel(r.id);recs=recs.filter(x=>x!=r)}saveR();showList()};
+$('#lclr').onclick=async()=>{if(confirm('Hapus seluruh riwayat?')){for(const r of recs)await bdel(r.id);recs=[];saveR();showList();toast('Riwayat dihapus')}};
+/* ===== DASHBOARD / PROFILE ===== */
+function dash(){const st=[['Foto diproses',recs.length],['Video diproses',S.vid],['Download',S.dl],['Favorit',recs.filter(r=>r.fav).length],['Kredit (DEMO)',S.credits],['Aktivitas terakhir',S.log[0]?S.log[0].split(' – ')[1]:'-']];
+$('#stats').innerHTML=st.map(s=>`<div class="card glass stat"><b>${s[1]}</b>${s[0]}</div>`).join('');
+const days=[...Array(7)].map((_,i)=>{const d=new Date(Date.now()-(6-i)*864e5).toDateString();return recs.filter(r=>new Date(r.date).toDateString()==d).length}),m=Math.max(1,...days);
+$('#bars').innerHTML=days.map(v=>`<i title="${v}" style="height:${v/m*100}%"></i>`).join('');$('#clog').innerHTML=S.log.filter(l=>l.includes('kredit')).slice(0,8).map(l=>'<div>'+l+'</div>').join('')||'Belum ada.'}
+function prof(){$('#pN').value=U.name;$('#pE').value=U.email;$('#av').src=S.avatar||'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72"><rect width="72" height="72" fill="#35a7ff"/></svg>');$('#alog').innerHTML=S.log.map(l=>'<div>'+l.replace(/</g,'&lt;')+'</div>').join('')}
+$('#pS').onclick=()=>{U.name=$('#pN').value.trim()||U.name;if(!CFG.API){const us=LS('ap_users')||{};if(us[U.email]){us[U.email].name=U.name;LS('ap_users',us)}}sessionStorage.setItem('ap_s',JSON.stringify(U));$('#hi').textContent='Halo, '+U.name;toast('Profil disimpan')};
+$('#avf').onchange=e=>{const f=e.target.files[0];if(!f||!f.type.startsWith('image/')||f.size>2e6)return toast('Gambar ≤2MB',1);const r=new FileReader();r.onload=()=>{S.avatar=r.result;saveS();prof();toast('Foto profil diperbarui')};r.readAsDataURL(f)};
+$('#pPb').onclick=async()=>{const p=$('#pP').value;if(p.length<8)return toast('Minimal 8 karakter',1);try{if(CFG.API)await api('/auth/password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:p})});else{const us=LS('ap_users'),s=crypto.getRandomValues(new Uint32Array(4)).join('-');us[U.email].salt=s;us[U.email].h=await hash(p,s);LS('ap_users',us)}$('#pP').value='';toast('Password diubah')}catch(e){toast(e.message,1)}};
+$('#lo').onclick=logout;
+async function wipeAll(){for(const r of recs)await bdel(r.id);Object.keys(localStorage).filter(k=>k.startsWith('ap_')).forEach(k=>k!='ap_users'&&localStorage.removeItem(k))}
+$('#wipe').onclick=async()=>{if(confirm('Hapus semua data lokal (riwayat, pengaturan, favorit)?')){await wipeAll();logout()}};
+$('#del').onclick=async()=>{if(!confirm('Hapus akun permanen?'))return;try{if(CFG.API)await api('/auth/delete',{method:'POST'});else{const us=LS('ap_users');delete us[U.email];LS('ap_users',us)}await wipeAll();logout()}catch(e){toast(e.message,1)}};
+/* ===== SETTINGS ===== */
+const SET=[['perf','Grafis','s',['low','medium','high','ultra']],['mode','Mode Gojo','s',['blind','six','inf','hollow','both']],['inten','Intensitas cahaya','r',[.3,2,.1]],['speed','Kecepatan animasi','r',[0,3,.1]],['bgOn','Animasi background','c'],['parts','Partikel energi','c'],['para','Efek parallax','c'],['fps','FPS counter','c'],['lowblur','Kurangi efek blur','c'],['batt','Battery Saver','c'],['motion','Animasi UI (OFF = Reduce Motion)','c'],['dark','Dark mode','c'],['sound','Efek suara','c']];
+$('#setF').innerHTML=SET.map(s=>`<div><label>${s[1]}</label>${s[2]=='s'?`<select data-k="${s[0]}">${s[3].map(o=>`<option>${o}</option>`).join('')}</select>`:s[2]=='r'?`<input type="range" data-k="${s[0]}" min="${s[3][0]}" max="${s[3][1]}" step="${s[3][2]}">`:`<input type="checkbox" data-k="${s[0]}">`}</div>`).join('');
+$('#setF').oninput=e=>{const k=e.target.dataset.k;if(!k)return;S[k]=e.target.type=='checkbox'?e.target.checked:e.target.type=='range'?+e.target.value:e.target.value;saveS();applyS()};
+function applyS(){$$('[data-k]').forEach(e=>e.type=='checkbox'?e.checked=S[e.dataset.k]:e.value=S[e.dataset.k]);$('#cr').textContent='DEMO · '+S.credits+' kredit';
+document.body.classList.toggle('light',!S.dark);document.body.classList.toggle('lowfx',S.lowblur||S.batt||S.perf=='low');document.body.classList.toggle('nomo',!S.motion);$('#fpsC').hidden=!S.fps;bgApply()}
+/* ===== 3D GOJO BACKGROUND ===== */
+const Q={low:[1,300],medium:[1.25,900],high:[1.5,1800],ultra:[2,3000]};let R,sc,cam,G,hair,band,eyes,ring,bo,po,pts,L,tx=0,ty=0,lt=0,fr=0,ft=performance.now(),running=false;
+function initBG(){if(!window.THREE){$('#bg').style.background='radial-gradient(circle at 50% 40%,#12255a,#05060f)';return}
+try{R=new THREE.WebGLRenderer({canvas:$('#bg'),alpha:true});sc=new THREE.Scene();cam=new THREE.PerspectiveCamera(55,1,.1,100);cam.position.z=6;
+sc.add(new THREE.AmbientLight(0x8899ff,.7));L=new THREE.PointLight(0x55aaff,2,30);L.position.set(3,3,5);sc.add(L);G=new THREE.Group();sc.add(G);
+G.add(new THREE.Mesh(new THREE.SphereGeometry(1,24,24),new THREE.MeshLambertMaterial({color:0xf2d7c4})));hair=new THREE.Group();const hm=new THREE.MeshLambertMaterial({color:0xf4f8ff}),cg=new THREE.ConeGeometry(.16,.9,5);
+for(let i=0;i<70;i++){const c=new THREE.Mesh(cg,hm),a=Math.random()*6.28,b=Math.random()*1.3,v=new THREE.Vector3(Math.sin(b)*Math.cos(a),Math.cos(b),Math.sin(b)*Math.sin(a));c.position.copy(v.clone().multiplyScalar(1.05));c.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v);hair.add(c)}G.add(hair);
+band=new THREE.Mesh(new THREE.CylinderGeometry(1.03,1.03,.34,24,1,true),new THREE.MeshBasicMaterial({color:0x080810,side:2}));band.position.y=.1;G.add(band);
+eyes=new THREE.Group();[-.38,.38].forEach(x=>{const e=new THREE.Mesh(new THREE.SphereGeometry(.13,12,12),new THREE.MeshBasicMaterial({color:0x66ddff}));e.position.set(x,.1,.93);eyes.add(e)});G.add(eyes);
+ring=new THREE.Mesh(new THREE.TorusGeometry(1.9,.03,8,80),new THREE.MeshBasicMaterial({color:0x35a7ff}));G.add(ring);
+bo=new THREE.Mesh(new THREE.SphereGeometry(.5,16,16),new THREE.MeshBasicMaterial({color:0x35a7ff}));bo.position.set(-2.8,0,0);sc.add(bo);
+po=new THREE.Mesh(new THREE.SphereGeometry(.7,16,16),new THREE.MeshBasicMaterial({color:0xa24bff}));po.position.set(2.8,0,0);sc.add(po);
+const n=3000,pa=new Float32Array(n*3).map(()=>(Math.random()-.5)*16),pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pa,3));
+pts=new THREE.Points(pg,new THREE.PointsMaterial({size:.05,color:0x88c4ff,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));sc.add(pts);
+addEventListener('resize',rs);rs();const mv=e=>{const t=e.touches?e.touches[0]:e;tx=t.clientX/innerWidth-.5;ty=t.clientY/innerHeight-.5};addEventListener('pointermove',mv);addEventListener('touchmove',mv,{passive:true});bgApply()}catch(e){console.warn('WebGL gagal',e);R=null}}
+function rs(){if(!R)return;R.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+function bgApply(){if(!R)return;const q=Q[S.batt?'low':S.perf];R.setPixelRatio(Math.min(devicePixelRatio,q[0]));rs();pts.geometry.setDrawRange(0,q[1]);pts.visible=!!S.parts;L.intensity=2*S.inten;const m=S.mode;band.visible=m!='six';eyes.visible=m=='six';ring.visible=bo.visible=m=='inf'||m=='both';po.visible=m=='hollow'||m=='both';
+$('#bg').hidden=!S.bgOn;if(S.bgOn&&!running){running=true;requestAnimationFrame(loop)}}
+function loop(t){if(!S.bgOn||document.hidden){running=false;return}requestAnimationFrame(loop);fr++;if(t-ft>1000){$('#fpsC').textContent=fr+' FPS';fr=0;ft=t}
+if(S.batt&&t-lt<33)return;lt=t;const k=S.motion?S.speed:0,s=t/1000*k;
+G.rotation.y+=((S.para?tx*1.2:0)-G.rotation.y)*.05;G.rotation.x+=((S.para?ty*.6:0)-G.rotation.x)*.05;G.position.y=Math.sin(s)*.15;ring.rotation.x=s;ring.rotation.y=s*.7;
+bo.position.x=-2.8+Math.cos(s)*.3;po.position.x=2.8-Math.cos(s)*.3;po.scale.setScalar(1+Math.sin(s*2)*.1*S.inten);pts.rotation.y=s*.05;R.render(sc,cam)}
+/* ===== BOOT ===== */
+initBG();
+setTimeout(()=>{$('#intro').style.opacity=0;setTimeout(()=>$('#intro').remove(),1000);const s=sessionStorage.getItem('ap_s');if(s){try{start(JSON.parse(s))}catch(e){$('#auth').hidden=false}}else $('#auth').hidden=false},3200);
+$('#intro').onclick=()=>$('#intro').style.opacity=0;
+setTab('login');
+</script></body></html>
